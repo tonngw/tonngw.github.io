@@ -1,0 +1,258 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="AcWing「Linux基础课」第 7 讲 管道、环境变量及其常用命令"><meta name="keywords" content="AcWing,Linux"><meta name="author" content="tonngw"><meta name="copyright" content="tonngw"><title>AcWing「Linux基础课」第 7 讲 管道、环境变量及其常用命令 | tonngw's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.js" defer></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"P5NFE6J44W","apiKey":"a87e5231a0a1c7fcde49dad8e41f9c15","indexName":"myindex","hits":{"per_page":10},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '6.1.0'
+} </script><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="tonngw's Blog" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E9%81%93"><span class="toc-number">1.</span> <span class="toc-text">管道 |</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%A1%E9%81%93%E7%AE%80%E4%BB%8B"><span class="toc-number">1.0.1.</span> <span class="toc-text">管道简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.0.2.</span> <span class="toc-text">示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.</span> <span class="toc-text">环境变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">2.0.1.</span> <span class="toc-text">环境变量简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.0.2.</span> <span class="toc-text">查看环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.0.3.</span> <span class="toc-text">修改环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.0.4.</span> <span class="toc-text">常见环境变量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E7%8A%B6%E6%80%81"><span class="toc-number">3.0.1.</span> <span class="toc-text">查看系统状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90"><span class="toc-number">3.0.2.</span> <span class="toc-text">文件权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%A3%80%E7%B4%A2"><span class="toc-number">3.0.3.</span> <span class="toc-text">文件检索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-number">3.0.4.</span> <span class="toc-text">查看文件内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">3.0.5.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">3.0.6.</span> <span class="toc-text">软件安装</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E4%B8%9A%E4%BB%A3%E7%A0%81"><span class="toc-number">4.</span> <span class="toc-text">作业代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-0"><span class="toc-number">4.1.</span> <span class="toc-text">homework_0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-1"><span class="toc-number">4.2.</span> <span class="toc-text">homework_1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-2"><span class="toc-number">4.3.</span> <span class="toc-text">homework_2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-3"><span class="toc-number">4.4.</span> <span class="toc-text">homework_3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-4"><span class="toc-number">4.5.</span> <span class="toc-text">homework_4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-5"><span class="toc-number">4.6.</span> <span class="toc-text">homework_5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-6"><span class="toc-number">4.7.</span> <span class="toc-text">homework_6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-7"><span class="toc-number">4.8.</span> <span class="toc-text">homework_7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-8"><span class="toc-number">4.9.</span> <span class="toc-text">homework_8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#homework-9"><span class="toc-number">4.10.</span> <span class="toc-text">homework_9</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://s1.328888.xyz/2022/04/23/2O5gF.jpg"></div><div class="author-info__name text-center">tonngw</div><div class="author-info__description text-center">Hello tong, hello world!</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/tonngw">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">86</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">52</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">9</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://leetcode-cn.com/u/tonngw/">MyLeetCode</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://s1.328888.xyz/2022/04/23/2aJwd.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">tonngw's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">AcWing「Linux基础课」第 7 讲 管道、环境变量及其常用命令</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-04-06</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Linux/">Linux</a><div class="post-meta-wordcount"><span>Word count: </span><span class="word-count">2.6k</span><span class="post-meta__separator">|</span><span>Reading time: 9 min</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h2 id="管道"><a href="#管道" class="headerlink" title="管道 |"></a>管道 <code>|</code></h2><h4 id="管道简介"><a href="#管道简介" class="headerlink" title="管道简介"></a>管道简介</h4><p>管道可以连接多条命令，并将前一个命令的标准输出 <code>stdout</code> 作为下一个命令的标准输入 <code>stdin</code>。当我们可以把一个任务分解成多条命令的时候，管道操作<strong>非常常用</strong>。</p>
+<p>注意：</p>
+<ul>
+<li>管道命令仅处理标准输出 <code>stdout</code>，忽略错误 <code>stderr</code></li>
+<li>管道右边的命令必须能够接收标准输入 <code>stdin</code>，才能将当前命令的标准输出传给它。</li>
+</ul>
+<p>管道命令与文件重定向类似，最主要的区别：</p>
+<ul>
+<li>文件重定向左边是命令，右边是文件，将左边命令的标准输出输出到文件中。</li>
+<li>管道左右两遍都是命令，且左边要有 <code>stdout</code> 右边要能够接收 <code>stdout</code>。</li>
+<li>管道可以接多条命令，<code>ps -aux | grep &quot;java&quot;</code>，而文件重定向将左边一条命令的输出重定向到指定的文件。</li>
+</ul>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>1、统计当前目录下所有 <code>python</code> 文件总行数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name <span class="string">&quot;*.py&quot;</span> | xargs <span class="built_in">cat</span> | <span class="built_in">wc</span> -l</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>find</code>：查找当前目录下所有后缀名是 <code>.py</code> 的文件</li>
+<li><code>xargs</code>：将 <code>find</code> 的输出结果作为参数传给 <code>cat</code> 命令，即查看这些 <code>.py</code> 文件的内容</li>
+<li><code>wc</code>：统计所有文件内容的总行数，最后输出</li>
+</ul>
+<p>2、统计当前目录下所有 <code>python</code> 文件个数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name <span class="string">&quot;*.py&quot;</span> | <span class="built_in">wc</span> -l</span><br></pre></td></tr></table></figure>
+
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><h4 id="环境变量简介"><a href="#环境变量简介" class="headerlink" title="环境变量简介"></a>环境变量简介</h4><p>和 Windows 系统一样，Linux 系统中也有很多环境变量用来记录<strong>配置信息</strong>，环境变量类似于全局变量，可以被所有的进程访问到，通过修改环境变量可以很方便地修改系统配置。</p>
+<h4 id="查看环境变量"><a href="#查看环境变量" class="headerlink" title="查看环境变量"></a>查看环境变量</h4><p>有三个命令可以列出当前系统中的环境变量，输出会有区别：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">env</span> <span class="comment"># 显示当前用户的环境变量</span></span><br><span class="line"><span class="built_in">set</span> <span class="comment"># 显示当前 shell 的环境变量，包含当前用户的环境变量</span></span><br><span class="line"><span class="built_in">export</span> <span class="comment"># 显示当前导出成用户变量的 shell 变量</span></span><br></pre></td></tr></table></figure>
+
+<p>输出某个环境变量的值，shell 语法 <code>$</code> 取值</p>
+<p><code>echo $PATH</code></p>
+<h4 id="修改环境变量"><a href="#修改环境变量" class="headerlink" title="修改环境变量"></a>修改环境变量</h4><p>比如修改当前系统的家目录 <code>home/acs</code> 修改为 <code>home/acs/homework</code>，可以使用 <code>export</code> 命令导出环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HOME=home/asc/homework</span><br></pre></td></tr></table></figure>
+
+<p>然后执行 <code>cd</code> 到家目录，此时发现家目录已经变成了 <code>home/acs/homework</code>。</p>
+<p>但重新打开 Terminal 的时候发现刚才的配置消失了，因为在命令行中执行修改后，只会在当前会话中生效，新建会话后会重新执行 <code>bash</code> 终端配置文件 <code>.bashrc</code>，而刚才的配置不在配置文件中，所以自然就失效了。</p>
+<hr>
+<p>所以想要我们的配置永久生效，我们可以直接修改 <code>.bashrc</code> 文件，然后执行 <code>source .bashrc</code> 刷新配置让其马上生效。</p>
+<h4 id="常见环境变量"><a href="#常见环境变量" class="headerlink" title="常见环境变量"></a>常见环境变量</h4><ul>
+<li><p><code>HOME</code>：用户家目录</p>
+</li>
+<li><p><code>PATH</code>：存放系统中可执行文件（命令）的路径，每个路径之间用 <code>:</code> 隔开，当某个命令同时在多个路径中出现时，会选择从左往右第一个出现的路径中的命令执行（<strong>短路原则</strong>）。<strong>下列所有存储路径的环境变量，均采用从左到右的优先顺序。</strong></p>
+</li>
+<li><p><code>C_INCLUDE_PATH</code>：C 语言的头文件路径，内容是以冒号分隔的路径列表。</p>
+</li>
+<li><p><code>CPLUS_INCLUDE_PATH</code>：CPP的头文件路径，内容是以冒号分隔的路径列表。</p>
+</li>
+<li><p><code>PYTHONPATH：Python</code> 导入包的路径，内容是以冒号分隔的路径列表。</p>
+</li>
+<li><p><code>JAVA_HOME</code>：JDK 的安装目录。</p>
+</li>
+<li><p><code>CLASSPATH</code>：存放 Java 导入类的路径，内容是以冒号分隔的路径列表。</p>
+</li>
+</ul>
+<p><strong>小技巧</strong>：可以将自己的可执行文件（命令）的存放路径放到 <code>PATH</code> 环境变量中，然后 <code>source .bashrc</code> 刷新配置，然后就可以在终端中的任何地方像执行 <code>ls</code> 一样直接执行我们的命令，非常 cool。</p>
+<blockquote>
+<p>比如是可执行脚本文件，不能加 <code>.sh</code> 后缀名，否则添加环境变量后不能识别。</p>
+</blockquote>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h4 id="查看系统状态"><a href="#查看系统状态" class="headerlink" title="查看系统状态"></a>查看系统状态</h4><p>1、<code>top</code>：查看系统所有进程的信息</p>
+<ul>
+<li>输入 <code>M</code> 按内存使用率从大到小排序</li>
+<li>输入 <code>P</code> 按 CPU 使用率从大到小排序</li>
+<li>输入 <code>q</code> 退出 <code>top</code></li>
+</ul>
+<p>2、<code>df -h</code>：查看硬盘使用情况，人性化展示 (h - humanity，我猜的 hh) </p>
+<p>3、<code>free -h</code>：查看内存使用情况</p>
+<p>4、<code>du</code>：统计占用硬盘空间</p>
+<ul>
+<li><code>du -sh</code>：统计当前目录占用的硬盘空间</li>
+<li><code>du -ch</code>：统计当前目录下所有文件和文件夹占用的空间</li>
+</ul>
+<p>5、<code>ps aux</code>：查看所有进程</p>
+<ul>
+<li>通常配合 <code>| grep 进程名</code> 查找某个进程，找到进程号 pid</li>
+<li><code>kill -9 pid </code> 杀掉这个进程</li>
+</ul>
+<p>6、<code>kill -9 pid</code>：杀掉进程号为 pid  的进程</p>
+<ul>
+<li><p><code>-9</code> 对应的信号是 <code>SIGKILL</code></p>
+</li>
+<li><p>传递某个具体的信号：<code>kill -s SIGTERM pid</code></p>
+</li>
+</ul>
+<p>7、<code>netstat -nt</code>：查看所有网络连接</p>
+<p>8、<code>w</code>：列出当前登录的用户</p>
+<p>9、<code>ping www.xxx.com</code>：检查是否与某个网站联通</p>
+<p>10、<code>history</code>：查看输入的历史命令，内容存放在 <code>~/.bash_history</code> 只会保存最近的 2000 条，显示 1000 条。</p>
+<h4 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h4><p><strong>首先要知道 Linux 下一切皆文件，目录也是文件哦。</strong></p>
+<p>Linux 文件权限，总共有 10 位</p>
+<ul>
+<li><code>1</code>：表示文件类型，可以是文件、目录、链接</li>
+<li><code>2-4</code>：表示当前用户对该文件所拥有的权限</li>
+<li><code>5-7</code>：表示当前用户组对该文件所拥有的权限</li>
+<li><code>8-10</code>：表示其他用户对该文件所拥有的权限</li>
+</ul>
+<p>其中 <code>rwx</code> 分别表示可读可写可执行</p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/04/03/52520_8496a4c2b3-image-20220403162555777.png" alt="image-20220403162555777.png"> </p>
+<p><code>chmod</code>：<code>change mode </code> 修改文件权限</p>
+<p>1、通过 <code>+ -</code> 权限字母设置文件权限</p>
+<ul>
+<li><code>chmod +x filename</code>：给 <code>filename</code> 添加可执行权限</li>
+<li><code>chmod -x filename</code>：去掉 <code>filename</code> 的可执行权限</li>
+<li>同理，可读可写权限 <code>-r -w</code> 修改一样的。</li>
+</ul>
+<p>2、通过三组数字设置文件权限</p>
+<ul>
+<li><code>chmod 777 filename</code>：将 <code>filename</code> 的权限设置为 <code>777</code>，777 表示可读可写可执行。</li>
+<li><code>chmod 777 filename -R</code>：递归修改整个文件夹的权限。</li>
+</ul>
+<h4 id="文件检索"><a href="#文件检索" class="headerlink" title="文件检索"></a>文件检索</h4><p>1、<code>find directory -name &#39;*.py&#39; </code>：搜索指定目录下所有 <code>.py</code> 文件，并将其路径输出出来</p>
+<p>2、<code>grep xxx</code>：从 <code>stdin</code> 中多行内容，如果某行中包含要搜索的内容 <code>xxx</code>，则输入该行，否则忽略改行。</p>
+<ul>
+<li><p><code>grep</code> 命令一般配合其他命令一起使用，通过管道处理上一个命令的输出结果。</p>
+</li>
+<li><p>比如：输出当前目录下所有 <code>.py</code> 文件中包含 <code>hello</code> 的行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name <span class="string">&quot;*.py&quot;</span> | xargs <span class="built_in">cat</span> | grep <span class="string">&#x27;hello&#x27;</span> </span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>3、<code>wc</code>：统计行数、单词数和字节数</p>
+<ul>
+<li>可以从标准输入 <code>stdin</code> 中读入内容，也可以从指定文件中读入内容，也可以从命令行中传入文件参数列表</li>
+<li><code>wc -l</code>：统计总行数</li>
+<li><code>wc -w</code>：统计总单词数</li>
+<li><code>wc -c</code>：统计总字节数</li>
+</ul>
+<p>4、<code>tree</code> &#x2F; <code>tree .</code>：树形展示当前目录的文件结构</p>
+<ul>
+<li><code>tree dirctory </code>：展示指定目录的文件结构</li>
+<li><code>tree -a</code>：可以展示隐藏文件</li>
+<li><code>tree -h</code>：可以展示每个文件的大小</li>
+</ul>
+<p>5、<code>ag xxx</code>：<strong>常用</strong>，搜索当前目录下的所有文件，检索 <code>xxx</code> 字符，输出所有包含 <code>xxx</code> 的行并且显示其对应的文件。</p>
+<p>6、<code>cut</code>：分割一行内容</p>
+<ul>
+<li><p>可以从标准输入中读取多行数据</p>
+</li>
+<li><p>举例：</p>
+<pre><code>`echo PATH | cut -d &#39;:&#39; -f 3,5`：输出 PATH 用:分割后第 3、5 列数据
+`echo $PATH | cut -d &#39;:&#39; -f 3-5`：输出 PATH 用:分割后第3-5列数据
+`echo $PATH | cut -c 3,5`：输出 PATH 的第 3、5 个字符
+`echo $PATH | cut -c 3-5`：输出 PATH 的第 3-5个字符
+</code></pre>
+</li>
+</ul>
+<p>7、<code>sort</code>：将每行内容按字典序排序</p>
+<ul>
+<li>可以从stdin中读取多行数据</li>
+<li>可以从命令行参数中读取文件名列表</li>
+<li>举例：<code>cat xxx.txt | sort</code>，将文件内容按每行字典序排序输出</li>
+</ul>
+<p>8、<code>xargs</code>：将 <code>stdin</code> 中的数据用空格或回车分割成命令行参数</p>
+<p>经典例子：统计当前目录下所有 python 文件的总行数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name <span class="string">&#x27;*.py&#x27;</span> | xargs <span class="built_in">cat</span> | <span class="built_in">wc</span> -l </span><br></pre></td></tr></table></figure>
+
+<h4 id="查看文件内容"><a href="#查看文件内容" class="headerlink" title="查看文件内容"></a>查看文件内容</h4><p>1、<code>more</code>：从前往后输出一页内容，回车下一行、空格下一页、<code>b</code> 上一页、<code>q</code> 退出查看</p>
+<p>2、<code>less</code>：和 <code>more</code> 类似，回车下一行，<code>y</code> 上一行，<code>Page Down</code> 下一页，<code>Page Up</code> 上一页，<code>q</code> 退出，比 more 功能更多。</p>
+<p>3、<code>head -3 xxx</code>：展示 xxx 的前 3 行内容</p>
+<ul>
+<li>支持 <code>stdin</code> 读入内容</li>
+</ul>
+<p>4、<code>tail -3 xxx</code>：展示 xxx 末尾 3 行内容，<strong>一般用于查看最新的日志。</strong></p>
+<ul>
+<li>支持 <code>stdin</code> 读入内容</li>
+</ul>
+<h4 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h4><p>1、<code>md5sum</code>：计算文件 md5 哈希值</p>
+<ul>
+<li>可以从 <code>stdin</code> 读入内容，按 <code>Ctrl + d</code> 结束，同时输出 md5 哈希值</li>
+</ul>
+<p>2、<code>time comand</code>：统计 <code>command</code> 命令的执行时间</p>
+<p>3、<code>ipython3</code>：一个 python 交换环境，可以用做计算器哈哈。</p>
+<ul>
+<li><code>! echo &quot;hello&quot;</code>：<code>!</code> 表示执行 shell 脚本</li>
+</ul>
+<p>4、<code>watch -n -1 command</code>：每 1s 执行一次命令</p>
+<p>5、<code>tar</code>：压缩解压缩</p>
+<ul>
+<li><code>tar -zcvf xxx.tar.gz yyy</code>：将目录 <code>yyy</code> 压缩成 <code>xxx.tar.gz</code>，c - compse</li>
+<li><code>tar -zxvf xxx.tar.gz -C yyy</code>：可以将 <code>xxx.tar.gz</code> 解压到指定目录，x - extract</li>
+</ul>
+<p>6、<code>diff xxx yyy</code>：查找文件 <code>xxx</code> 与 <code>yyy</code> 的差异</p>
+<h4 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h4><p>1、<code>sudo command</code>：以 <code>root</code> 身份执行命令</p>
+<p>2、<code>apt-get install xxx</code>：安装软件，需要 <code>sudo</code> 提权</p>
+<p>3、<code>pip install xxx --user --upgrade</code>：安装 <code>python</code> 包</p>
+<h2 id="作业代码"><a href="#作业代码" class="headerlink" title="作业代码"></a>作业代码</h2><h3 id="homework-0"><a href="#homework-0" class="headerlink" title="homework_0"></a>homework_0</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># [1]</span></span><br><span class="line">vim mydu</span><br><span class="line"></span><br><span class="line"><span class="comment">#! /bin/bash</span></span><br><span class="line"><span class="built_in">du</span> -sh</span><br><span class="line"></span><br><span class="line">:wq</span><br><span class="line"></span><br><span class="line"><span class="comment"># [2] 修改环境变量 PATH，将 mydu 所在目录加入到环境变量中</span></span><br><span class="line"><span class="built_in">cd</span></span><br><span class="line">vim .bashrc</span><br><span class="line"><span class="built_in">export</span> PATH=/home/acs/homework/lesson_7/homework_0:ŞPATH</span><br><span class="line">:wq</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> .bashrc</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-1"><a href="#homework-1" class="headerlink" title="homework_1"></a>homework_1</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># [1]</span></span><br><span class="line"><span class="built_in">chmod</span> +r ./*</span><br><span class="line"></span><br><span class="line"><span class="comment">#[2]</span></span><br><span class="line">find . -name <span class="string">&quot;*.cpp&quot;</span> | <span class="built_in">wc</span> -l &gt; ans.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-2"><a href="#homework-2" class="headerlink" title="homework_2"></a>homework_2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># [1]</span></span><br><span class="line">find . -name <span class="string">&quot;*.cpp&quot;</span> | xargs <span class="built_in">cat</span> | <span class="built_in">wc</span> -l &gt; ans1.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># [2]</span></span><br><span class="line">find . -name <span class="string">&quot;*.py&quot;</span> | xargs <span class="built_in">cat</span> | grep <span class="string">&quot;thrift&quot;</span> | <span class="built_in">wc</span> -l &gt; ans2.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-3"><a href="#homework-3" class="headerlink" title="homework_3"></a>homework_3</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name <span class="string">&quot;*.py&quot;</span> | xargs <span class="built_in">rm</span> -r</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-4"><a href="#homework-4" class="headerlink" title="homework_4"></a>homework_4</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 cut 命令按空格 &#x27; &#x27; 切分</span></span><br><span class="line"><span class="built_in">cat</span> scores.txt | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f 1 &gt; names.txt</span><br><span class="line"><span class="built_in">cat</span> scores.txt | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f 2 &gt; mathematics.txt</span><br><span class="line"><span class="built_in">cat</span> scores.txt | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f 3 &gt; algorithm.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-5"><a href="#homework-5" class="headerlink" title="homework_5"></a>homework_5</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> scores.txt | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f 1 | <span class="built_in">sort</span> &gt; names.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-6"><a href="#homework-6" class="headerlink" title="homework_6"></a>homework_6</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">head</span> -5 scores.txt &gt; top.txt</span><br><span class="line"><span class="built_in">tail</span> -4 scores.txt &gt; bottom.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-7"><a href="#homework-7" class="headerlink" title="homework_7"></a>homework_7</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">md5sum</span> scores.txt | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f 1 &gt; ans.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-8"><a href="#homework-8" class="headerlink" title="homework_8"></a>homework_8</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># [1]</span></span><br><span class="line">tar -zcvf project_a.tar.gz dir_a/</span><br><span class="line"><span class="comment"># [2]</span></span><br><span class="line">tar -zxvf project_b.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="homework-9"><a href="#homework-9" class="headerlink" title="homework_9"></a>homework_9</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 ipython3 做运算将结果重定向到 ans.txt 文件中</span></span><br><span class="line">ipython3</span><br><span class="line">2 ** 112 + 3 ** 78</span><br><span class="line">16428395565119192973859998297038475385</span><br><span class="line">!<span class="built_in">echo</span> 16428395565119192973859998297038475385 &gt; ans.txt</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/04/03/52520_7efd0fd4b3-image-20220403192533724.png" alt="image-20220403192533724.png"></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">tonngw</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://tonngw.com/2022/04/06/AcWing/第 7 讲 管道、环境变量及其常用命令/">https://tonngw.com/2022/04/06/AcWing/第 7 讲 管道、环境变量及其常用命令/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AcWing/">AcWing</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/04/10/AcWing/%E7%AC%AC%208%20%E8%AE%B2%20%E7%A7%9F%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%8A%E9%85%8D%E7%8E%AF%E5%A2%83/"><i class="fa fa-chevron-left">  </i><span>AcWing「Linux基础课」第 8 讲 租云服务器及配环境</span></a></div><div class="next-post pull-right"><a href="/2022/04/04/AcWing/%E7%AC%AC%206%20%E8%AE%B2%20Thrift/"><span>AcWing「Linux基础课」第 6 讲 Thrift</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="vcomment"></div><script src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var notify = 'false' == 'true';
+var verify = 'false' == 'true';
+var record_ip = 'true' == 'true';
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  recordIP:record_ip,
+  appId:'x73ii48suzXIblxOEM3f8zWo-gzGzoHsz',
+  appKey:'HoMuJL7bldRwzttUgUjmrRgU',
+  placeholder:'Just go go',
+  avatar:'mm',
+  guest_info:guest_info,
+  pageSize:'10',
+  lang: 'zh-cn'
+})</script></div></div><footer class="footer-bg" style="background-image: url(https://s1.328888.xyz/2022/04/23/2aJwd.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2022 By tonngw</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><script src="/js/search/algolia.js"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="https://cdn.jsdelivr.net/npm/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
