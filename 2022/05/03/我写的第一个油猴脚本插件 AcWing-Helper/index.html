@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="我写的第一个油猴脚本插件 AcWing-Helper"><meta name="keywords" content="AcWing,油猴脚本"><meta name="author" content="tonngw"><meta name="copyright" content="tonngw"><title>我写的第一个油猴脚本插件 AcWing-Helper | tonngw's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.js" defer></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"P5NFE6J44W","apiKey":"a87e5231a0a1c7fcde49dad8e41f9c15","indexName":"myindex","hits":{"per_page":10},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '6.1.0'
+} </script><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="tonngw's Blog" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AcWing-Helper"><span class="toc-number">1.</span> <span class="toc-text">AcWing-Helper</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD"><span class="toc-number">1.2.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AcWing-Helper-%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">1.3.</span> <span class="toc-text">AcWing-Helper 工作流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">1.5.</span> <span class="toc-text">如何使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E6%8D%B7%E9%94%AE%E3%80%8C%E6%8E%A8%E8%8D%90%E3%80%8D"><span class="toc-number">1.5.1.</span> <span class="toc-text">快捷键「推荐」</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E6%8C%89%E9%92%AE"><span class="toc-number">1.5.2.</span> <span class="toc-text">页面按钮</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%B3%E9%94%AE%E8%8F%9C%E5%8D%95"><span class="toc-number">1.5.3.</span> <span class="toc-text">右键菜单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E6%A0%8F"><span class="toc-number">1.5.4.</span> <span class="toc-text">插件栏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%B4%E8%B0%A2"><span class="toc-number">1.6.</span> <span class="toc-text">致谢</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9D%83%E5%A3%B0%E6%98%8E"><span class="toc-number">1.7.</span> <span class="toc-text">版权声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.8.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E"><span class="toc-number">1.9.</span> <span class="toc-text">免责声明</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://cdn.acwing.com/media/article/image/2023/03/25/52520_b77caa85ca-1.jpg"></div><div class="author-info__name text-center">tonngw</div><div class="author-info__description text-center">Hello tong, hello world!</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/tonngw">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">89</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">58</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">12</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://leetcode-cn.com/u/tonngw/">MyLeetCode</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://cdn.acwing.com/media/article/image/2023/03/25/52520_8b767ce9ca-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">tonngw's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">我写的第一个油猴脚本插件 AcWing-Helper</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-05-03</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%B2%B9%E7%8C%B4%E8%84%9A%E6%9C%AC/">油猴脚本</a><div class="post-meta-wordcount"><span>Word count: </span><span class="word-count">1.1k</span><span class="post-meta__separator">|</span><span>Reading time: 3 min</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><blockquote>
+<p>如果这款插件对你有帮助，请帮我在仓库 <a target="_blank" rel="noopener" href="https://github.com/tonngw/acwing-helper">https://github.com/tonngw/acwing-helper</a> 中点个 <code>Star</code>，这对我很有帮助，谢谢~ </p>
+</blockquote>
+<h1 id="AcWing-Helper"><a href="#AcWing-Helper" class="headerlink" title="AcWing-Helper"></a>AcWing-Helper</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>写这个脚本的初衷是为了方便在 <a target="_blank" rel="noopener" href="https://www.acwing.com/">AcWing</a> 上写题解，每次复制题目描述再修改格式就是一件比较头疼的事情，其实很早之前在写题解的时候就萌生了这个想法，但一直没有动手去做，总觉得太难不好实现。这次花了几天时间边学边查总算写出来了。另外还添加了一些比较实用的功能，我相信 <code>AcWing</code> 的小伙伴们应该会喜欢的。</p>
+<p><strong>特殊说明：</strong></p>
+<ol>
+<li>经 y 总同意且只在 <code>AcWing</code> 平台分享</li>
+<li><strong><code>脚本可能随时会失效，如果失效了请自觉关掉，以免影响大家的正常使用。</code></strong></li>
+<li>希望大家规范使用，在 <code>AcWing</code> 上快乐学习，不得有其他用途，且用且珍惜！</li>
+</ol>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/03/52520_5c746e65ca-image-20220503111832351.png" alt="image-20220503111832351.png"> </p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><ol>
+<li><p>复制题目描述，并存入剪切板</p>
+</li>
+<li><p>复制题目描述生成当前题目的题解模板，并存入剪切板<br>大多数情况下一道题目只会写一种做法，这里提供了一套简洁的模板，模板来自 <code>AcWing</code>。</p>
+</li>
+<li><p>切换页面风格，<code>AcWing &lt;-&gt; LeetCode</code></p>
+</li>
+<li><p>复制代码（目前只支持 <code>*/code/*</code> 目录下的代码，即从打卡页面点击题目查看相关代码）</p>
+</li>
+<li><p>活动打卡页面直接跳转到题目页面（支持所有活动）</p>
+</li>
+<li><p>在题目内容页面内打开题目</p>
+</li>
+</ol>
+<h2 id="AcWing-Helper-工作流"><a href="#AcWing-Helper-工作流" class="headerlink" title="AcWing-Helper 工作流"></a>AcWing-Helper 工作流</h2><ol>
+<li>打开一道题目先读题</li>
+<li>有了思路，我们往往会边写边回头看题目描述，此时可以 <code>Alt + S</code> 切换页面风格，左边看题右边编写代码（会比上下翻页方便一些）。</li>
+<li>代码 $AC$ 之后，<code>Alt + C</code> 生成题解模板，在题解页面记录题目思路，如果有自己的题解模板， 可以 <code>Alt + T</code> 仅复制题目描述。&#96;</li>
+<li>想调试打卡页面中别人的代码，点击左上角 <code>Copy</code> 按钮图标一键复制代码。</li>
+</ol>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><strong>环境：</strong></p>
+<ol>
+<li>Chrome 浏览器 &#x2F; Edge 浏览器</li>
+<li>安装 <code>Tampermonkey</code> 油猴插件，这块大家自行搜索安装，网上有很多教程。</li>
+</ol>
+<p><strong>Option 1</strong>：直接在 <a target="_blank" rel="noopener" href="https://greasyfork.org/zh-CN">https://greasyfork.org/zh-CN</a> 搜索 <code>acwing-helper</code>，安装，或者直接点击 <a target="_blank" rel="noopener" href="https://greasyfork.org/zh-CN/scripts/444381-acwing-helper">此链接</a> 直接安装。「推荐」</p>
+<p><strong>Option 2：</strong>脚本源代码已经放在了 <a target="_blank" rel="noopener" href="https://github.com/tonngw/acwing-helper">我的 GitHub</a> 上 | 在 <code>acwing-helper</code> 脚本安装页面「代码」Tab 中也可以看到，可以复制自行安装，如果对大家有帮助别忘了点个 <code>Star</code> 吖~。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><h3 id="快捷键「推荐」"><a href="#快捷键「推荐」" class="headerlink" title="快捷键「推荐」"></a>快捷键「推荐」</h3><p>为前三个常用功能绑定了快捷键</p>
+<ul>
+<li>功能 1 - <code>Alt + T(timu)</code></li>
+<li>功能 2 - <code>Alt + C(copy)</code></li>
+<li>功能 3 - <code>Alt + S(split)</code></li>
+</ul>
+<p>大家可以自行在源代码中修改快捷键</p>
+<h3 id="页面按钮"><a href="#页面按钮" class="headerlink" title="页面按钮"></a>页面按钮</h3><ul>
+<li><p>功能 1 - <code>题目「复制」</code></p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/03/52520_6e3ffd67ca-image-20220503103834168.png" alt="image-20220503103834168.png"> </p>
+</li>
+<li><p>功能 2 - <code>题解 「生成」</code></p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/03/52520_721c6ee7ca-image-20220503103912747.png" alt="image-20220503103912747.png"> </p>
+</li>
+<li><p>功能 3 - <code>代码编辑器 - 挑战模式 「Right | Bottom」</code></p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/03/52520_7b8fdfd6ca-image-20220503104001484.png" alt="image-20220503104001484.png"> </p>
+</li>
+<li><p>功能 4 - <code>代码块左上角「复制图标」</code></p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/06/20/52520_468f584df0-snipaste20220620_185952.png" alt="snipaste20220620_185952.png"> </p>
+</li>
+<li><p>功能 5 - <code>每道题目后面的蓝色跳转按钮</code></p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/28/52520_e427449ede-image-20220528151423918.png" alt="image-20220528151423918.png"> </p>
+</li>
+<li><p>功能 6 - <code>原题链接后面的蓝色打开按钮</code></p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/28/52520_2321b160de-image-20220528152320934.png" alt="image-20220528152320934.png"></p>
+</li>
+</ul>
+<h3 id="右键菜单"><a href="#右键菜单" class="headerlink" title="右键菜单"></a>右键菜单</h3><p>右键 - <code>Tampermonkey</code>，可以看到 <code>acwing-helper</code> 提供的功能。</p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/03/52520_89175c3bca-image-20220503103634672.png" alt="image-20220503103634672.png"> </p>
+<h3 id="插件栏"><a href="#插件栏" class="headerlink" title="插件栏"></a>插件栏</h3><p>点击油猴插件，可以看到 <code>acwing-helper</code> 提供的功能。</p>
+<p><img src="https://cdn.acwing.com/media/article/image/2022/05/03/52520_9048be6fca-image-20220503104645827.png" alt="image-20220503104645827.png"> </p>
+<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>感谢以下作者提供的思路，感谢 <code>AcWing</code> 提供的算法学习平台！</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZimoLoveShuang/leetcode-helper">https://github.com/ZimoLoveShuang/leetcode-helper</a> </li>
+<li><a target="_blank" rel="noopener" href="https://greasyfork.org/zh-CN/scripts/441750-acwing-content-to-markdown">https://greasyfork.org/zh-CN/scripts/441750-acwing-content-to-markdown</a></li>
+</ul>
+<h2 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h2><p>关于 <code>AcWing</code> 上的内容商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/mixmark-io/turndown">https://github.com/mixmark-io/turndown</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.tampermonkey.net.cn/">https://bbs.tampermonkey.net.cn/</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/t4t5/sweetalert">https://github.com/t4t5/sweetalert</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40205116/article/details/84664192">https://blog.csdn.net/qq_40205116/article/details/84664192</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010598445/article/details/108880602">https://blog.csdn.net/u010598445/article/details/108880602</a></li>
+</ul>
+<h2 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h2><blockquote>
+<p>感谢 @<a target="_blank" rel="noopener" href="https://www.acwing.com/user/myspace/index/61523/">acwing_gza</a> 同学编写的免责声明~</p>
+</blockquote>
+<ol>
+<li>用户不得盗用本油猴插件，如需转载，请注明出处。</li>
+<li>本插件版权归 <a target="_blank" rel="noopener" href="https://www.acwing.com/user/myspace/index/52520/">tonngw</a>，如有需要，可以反馈给作者。</li>
+<li>不可以使用本插件，进行违法活动，包括但不限于色情暴力图片，文字以及一切传播方式。</li>
+<li>不可用此插件偷盗 AcWing 学习资源。</li>
+<li>插件失效请联系 <a target="_blank" rel="noopener" href="https://www.acwing.com/user/myspace/index/52520/">tonngw</a>，并立刻停用。</li>
+<li>最终解释权归 <a target="_blank" rel="noopener" href="https://www.acwing.com/user/myspace/index/52520/">tonngw</a> 所有。</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">tonngw</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://tonngw.com/2022/05/03/我写的第一个油猴脚本插件 AcWing-Helper/">https://tonngw.com/2022/05/03/我写的第一个油猴脚本插件 AcWing-Helper/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AcWing/">AcWing</a><a class="post-meta__tags" href="/tags/%E6%B2%B9%E7%8C%B4%E8%84%9A%E6%9C%AC/">油猴脚本</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/06/14/%E6%A0%A1%E5%9B%AD%E7%BD%91%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95/"><i class="fa fa-chevron-left">  </i><span>校园网自动登录</span></a></div><div class="next-post pull-right"><a href="/2022/04/10/AcWing/%E7%AC%AC%208%20%E8%AE%B2%20%E7%A7%9F%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%8A%E9%85%8D%E7%8E%AF%E5%A2%83/"><span>AcWing「Linux基础课」第 8 讲 租云服务器及配环境</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="vcomment"></div><script src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var notify = 'false' == 'true';
+var verify = 'false' == 'true';
+var record_ip = 'true' == 'true';
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  recordIP:record_ip,
+  appId:'x73ii48suzXIblxOEM3f8zWo-gzGzoHsz',
+  appKey:'HoMuJL7bldRwzttUgUjmrRgU',
+  placeholder:'Just go go',
+  avatar:'mm',
+  guest_info:guest_info,
+  pageSize:'10',
+  lang: 'zh-cn'
+})</script></div></div><footer class="footer-bg" style="background-image: url(https://cdn.acwing.com/media/article/image/2023/03/25/52520_8b767ce9ca-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2023 By tonngw</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><script src="/js/search/algolia.js"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="https://cdn.jsdelivr.net/npm/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
